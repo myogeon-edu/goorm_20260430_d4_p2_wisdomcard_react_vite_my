@@ -72,7 +72,7 @@ coverage
 # server/data/cards.json
 # server/data/searchLog.json
 # server/data/tts/*.mp3
-
+.vite
 
 
 # === Media Files ===

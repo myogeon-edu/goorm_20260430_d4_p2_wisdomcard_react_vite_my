@@ -116,7 +116,7 @@ coverage
 
 # Big Data files
 *.csv
-*.json
+# *.json
 *.xml
 
 

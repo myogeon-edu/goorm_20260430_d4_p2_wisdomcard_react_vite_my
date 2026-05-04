@@ -8,6 +8,16 @@ import {
 } from "react";
 import "./App.css";
 
+/** Netlify 등 정적 호스팅 + Render API: 빌드 시 `VITE_API_BASE_URL` (끝 슬래시 없음). 로컬은 비우면 /api 프록시 */
+const API_BASE = String(import.meta.env.VITE_API_BASE_URL || "").replace(
+  /\/+$/,
+  "",
+);
+function apiUrl(path) {
+  const p = path.startsWith("/") ? path : `/${path}`;
+  return API_BASE ? `${API_BASE}${p}` : p;
+}
+
 function toYear(v) {
   if (v === null || v === undefined || v === "") return null;
   const n = Number(v);
@@ -304,7 +314,7 @@ export default function App() {
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch("/api/cards");
+        const res = await fetch(apiUrl("/api/cards"));
         const json = await res.json().catch(() => ({}));
         if (!res.ok || !json.ok) {
           throw new Error(json.error || res.statusText || "목록 불러오기 실패");
@@ -464,7 +474,7 @@ export default function App() {
       setAudioError("");
       setTtsBusyId(record.id);
       try {
-        const res = await fetch("/api/tts", {
+        const res = await fetch(apiUrl("/api/tts"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -525,7 +535,7 @@ export default function App() {
     setError("");
     setLoading(true);
     try {
-      const res = await fetch("/api/quote", {
+      const res = await fetch(apiUrl("/api/quote"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: "{}",
